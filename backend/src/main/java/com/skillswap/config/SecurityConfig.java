@@ -76,7 +76,11 @@ public class SecurityConfig {
         // setAllowedOriginPatterns (not setAllowedOrigins) so a wildcard like
         // "http://localhost:*" is honored — this survives Vite picking a
         // different port (5173, 5174, 5175...) between runs.
-        configuration.setAllowedOriginPatterns(Arrays.asList(allowedOriginPatterns.split(",")));
+        configuration.setAllowedOriginPatterns(
+    Arrays.stream(allowedOriginPatterns.split(","))
+        .map(String::trim)
+        .toList()
+);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
