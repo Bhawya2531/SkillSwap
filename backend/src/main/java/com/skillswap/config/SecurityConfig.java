@@ -1,5 +1,6 @@
 package com.skillswap.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import com.skillswap.security.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -66,6 +67,13 @@ public class SecurityConfig {
             )
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        .exceptionHandling(ex -> ex.authenticationEntryPoint((request, response, authException) -> {
+    System.out.println("403 BLOCKED -> " + request.getMethod()
+            + " URI=" + request.getRequestURI()
+            + " CONTEXT=" + request.getContextPath());
+
+    response.sendError(HttpServletResponse.SC_FORBIDDEN);
+}))
 
         return http.build();
     }
