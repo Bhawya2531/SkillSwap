@@ -56,26 +56,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/skills/**").permitAll()
-                .requestMatchers("/error").permitAll()
-                .anyRequest().authenticated()
-            )
-            .authenticationProvider(authenticationProvider())
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-        .exceptionHandling(ex -> ex.authenticationEntryPoint((request, response, authException) -> {
-    System.out.println("403 BLOCKED -> " + request.getMethod()
-            + " URI=" + request.getRequestURI()
-            + " CONTEXT=" + request.getContextPath());
+           http
+    .csrf(csrf -> csrf.disable())
+    .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+    .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+    .authorizeHttpRequests(auth -> auth
+        .requestMatchers("/api/auth/**").permitAll()
+        .requestMatchers("/api/skills/**").permitAll()
+        .requestMatchers("/error").permitAll()
+        .anyRequest().authenticated()
+    )
+    .authenticationProvider(authenticationProvider())
+    .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-    response.sendError(HttpServletResponse.SC_FORBIDDEN);
-}));
-
-        return http.build();
+return http.build();
     }
 
     @Bean
