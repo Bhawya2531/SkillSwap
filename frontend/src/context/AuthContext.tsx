@@ -62,16 +62,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     const response = await authApi.login({ email, password })
-    localStorage.setItem("skillswap_token", response.token)
-    localStorage.setItem("skillswap_user", JSON.stringify(response.user))
-    setUser(response.user)
+
+if (!response?.token) {
+  throw new Error(
+    "Login response did not include a token. Check VITE_API_URL / API connectivity."
+  )
+}
+localStorage.setItem("skillswap_token", response.token)
+localStorage.setItem("skillswap_user", JSON.stringify(response.user))
+setUser(response.user)
   }
 
   const register = async (fullName: string, email: string, password: string) => {
     const response = await authApi.register({ fullName, email, password })
-    localStorage.setItem("skillswap_token", response.token)
-    localStorage.setItem("skillswap_user", JSON.stringify(response.user))
-    setUser(response.user)
+
+if (!response?.token) {
+  throw new Error(
+    "Register response did not include a token. Check VITE_API_URL / API connectivity."
+  )
+}
+
+localStorage.setItem("skillswap_token", response.token)
+localStorage.setItem("skillswap_user", JSON.stringify(response.user))
+setUser(response.user)
   }
 
   const logout = () => {
