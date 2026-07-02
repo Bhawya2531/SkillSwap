@@ -66,14 +66,14 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .authenticationProvider(authenticationProvider())
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
         .exceptionHandling(ex -> ex.authenticationEntryPoint((request, response, authException) -> {
     System.out.println("403 BLOCKED -> " + request.getMethod()
             + " URI=" + request.getRequestURI()
             + " CONTEXT=" + request.getContextPath());
 
     response.sendError(HttpServletResponse.SC_FORBIDDEN);
-}))
+}));
 
         return http.build();
     }
